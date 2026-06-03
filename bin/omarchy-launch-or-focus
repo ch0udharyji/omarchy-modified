@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# omarchy:summary=Launch an app or focus an existing window matching a pattern
+# omarchy:args=<window-pattern> <launch-command>
+
 if (($# == 0)); then
   echo "Usage: omarchy-launch-or-focus [window-pattern] [launch-command]"
   exit 1
@@ -12,5 +15,5 @@ WINDOW_ADDRESS=$(hyprctl clients -j | jq -r --arg p "$WINDOW_PATTERN" '.[]|selec
 if [[ -n $WINDOW_ADDRESS ]]; then
   hyprctl dispatch focuswindow "address:$WINDOW_ADDRESS"
 else
-  eval exec $LAUNCH_COMMAND
+  eval exec setsid $LAUNCH_COMMAND
 fi
